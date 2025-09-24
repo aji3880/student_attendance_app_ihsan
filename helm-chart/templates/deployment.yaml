@@ -15,7 +15,10 @@ spec:
         app: {{ include "helm-chart.fullname" . }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
     spec:
-      serviceAccountName: {{ default (include "helm-chart.fullname" .) .Values.serviceAccount.name }}
+  template:
+    spec:
+      {{- $sa := .Values.serviceAccount | default dict }}
+      serviceAccountName: {{ default (include "helm-chart.fullname" .) $sa.name }}
       securityContext:
         runAsUser: {{ if .Values.securityContext.runAsUser }}{{ .Values.securityContext.runAsUser }}{{ else }}null{{ end }}
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
