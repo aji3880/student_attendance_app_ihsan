@@ -1,3 +1,3 @@
 {{- define "helm-chart.fullname" -}}
-{{- printf "%s" .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s" .Release.Name -}}
 {{- end -}}

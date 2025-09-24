@@ -1,9 +1,7 @@
-apiVersion: apps/v1
-kind: Deployment
 metadata:
-  name: {{ include "attendance-frontend.fullname" . }}
+  name: {{ include "helm-chart.fullname" . }}
   labels:
-    app: {{ include "attendance-frontend.fullname" . }}
+    app: {{ include "helm-chart.fullname" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -14,33 +12,3 @@ spec:
       labels:
         app: {{ include "helm-chart.fullname" . }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
-    spec:
-      serviceAccountName: {{ default (include "helm-chart.fullname" .) .Values.serviceAccount.name }}
-      securityContext:
-        runAsUser: {{ if .Values.securityContext.runAsUser }}{{ .Values.securityContext.runAsUser }}{{ else }}null{{ end }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-        fsGroup: {{ if .Values.securityContext.fsGroup }}{{ .Values.securityContext.fsGroup }}{{ else }}null{{ end }}
-      containers:
-        - name: {{ include "helm-chart.fullname" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: {{ .Values.service.port }}
-              name: http
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.livenessProbe.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.readinessProbe.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
