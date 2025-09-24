@@ -46,17 +46,21 @@ pipeline {
             }
         }
 
-        stage('install Helm if needed') {
+        stage('install Helm') {
             steps {
                 script {
                     sh """
                     if ! command -v helm &> /dev/null; then
-                        echo "Helm not found, installing..."
-                        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+                        echo "Helm not found, installing locally..."
+                        curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
+                        tar -zxvf helm.tar.gz
+                        mv linux-amd64/helm ./helm
+                        chmod +x ./helm
+                        export PATH=\$PATH:\$(pwd)
                     else
                         echo "Helm is already installed"
                     fi
-                    helm version
+                    ./helm version
                     """
                 }
             }
