@@ -70,9 +70,10 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo "Deploying ${APP_NAME} with Helm..."
-                    ./helm upgrade --install ${APP_NAME} ${HELM_CHART_PATH} \
+                    echo "Deploying ${APP_NAME}"
+                    ./helm upgrade --install ${APP_NAME} ./helm/attendance-frontend \
                         --namespace ${OCP_NAMESPACE} \
+                        --create-namespace \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG}
                     """
