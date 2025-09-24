@@ -1,3 +1,4 @@
+{{- $route := .Values.route | default dict }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -8,6 +9,8 @@ spec:
     name: {{ include "helm-chart.fullname" . }}
   port:
     targetPort: http
-  host: {{ default nil .Values.route.host }}
+{{- if $route.host }}
+  host: {{ $route.host }}
+{{- end }}
   tls:
-    termination: {{ if .Values.route.tls }}edge{{ else }}""{{ end }}
+    termination: {{ if $route.tls }}edge{{ else }}""{{ end }}
