@@ -51,7 +51,6 @@ pipeline {
                 script {
                     sh """
                     if ! command -v helm &> /dev/null; then
-                        echo "Helm not found, installing locally..."
                         curl -sSL https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz -o helm.tar.gz
                         tar -zxvf helm.tar.gz
                         mv linux-amd64/helm ./helm
