@@ -71,7 +71,7 @@ pipeline {
                 script {
                     sh """
                     echo "Deploying ${APP_NAME}"
-                    ./helm upgrade --install ${APP_NAME} ./helm/attendance-frontend \
+                    ./helm upgrade --install ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} \
                         --create-namespace \
                         --set image.repository=${IMAGE_REPO} \
