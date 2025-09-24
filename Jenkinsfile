@@ -6,6 +6,7 @@ pipeline {
         APP_NAME      = "frontend-app"
         IMAGE_TAG     = "latest"
         OCP_NAME      = "https://api.cluster-9wl8l.dynamic.redhatworkshops.io:6443"
+        OCP_TOKEN    = "sha256~sWkpVHkKhgFS4A0J_QXYAJ6Wp-mC5HKfaq9EvSN2XPU"
         HELM_CHART_PATH = "helm/attendance-frontend"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
     }
@@ -20,7 +21,7 @@ pipeline {
         stage('Login to OpenShift') {
             steps {
                 sh """
-                oc login --token=\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=${OCP_NAME} --insecure-skip-tls-verify=true
+                oc login --token=${OCP_TOKEN} --server=${OCP_NAME} --insecure-skip-tls-verify=true
                 if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
                     oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
                 fi
