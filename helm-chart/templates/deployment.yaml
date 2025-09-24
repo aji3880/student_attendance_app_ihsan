@@ -8,20 +8,20 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "attendance-frontend.fullname" . }}
+      app: {{ include "helm-chart.fullname" . }}
   template:
     metadata:
       labels:
-        app: {{ include "attendance-frontend.fullname" . }}
+        app: {{ include "helm-chart.fullname" . }}
       annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
     spec:
-      serviceAccountName: {{ default (include "attendance-frontend.fullname" .) .Values.serviceAccount.name }}
+      serviceAccountName: {{ default (include "helm-chart.fullname" .) .Values.serviceAccount.name }}
       securityContext:
         runAsUser: {{ if .Values.securityContext.runAsUser }}{{ .Values.securityContext.runAsUser }}{{ else }}null{{ end }}
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
         fsGroup: {{ if .Values.securityContext.fsGroup }}{{ .Values.securityContext.fsGroup }}{{ else }}null{{ end }}
       containers:
-        - name: {{ include "attendance-frontend.fullname" . }}
+        - name: {{ include "helm-chart.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

@@ -1,11 +1,11 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "attendance-frontend.fullname" . }}
+  name: {{ include "helm-chart.fullname" . }}
 spec:
   to:
     kind: Service
-    name: {{ include "attendance-frontend.fullname" . }}
+    name: {{ include "helm-chart.fullname" . }}
   port:
     targetPort: http
   host: {{ default nil .Values.route.host }}
