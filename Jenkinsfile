@@ -70,7 +70,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo "Deploying ${APP_NAME}"
                     ./helm upgrade --install ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} \
                         --create-namespace \
