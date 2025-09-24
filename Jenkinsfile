@@ -66,14 +66,14 @@ pipeline {
             }
         }
 
-        stage('Deploy with Helm') {
+        stage('Deploy Helm') {
             steps {
                 script {
                     sh """
                     echo "Deploying ${APP_NAME} with Helm..."
-                    helm upgrade --install ${APP_NAME} ${HELM_CHART_PATH} \\
-                        --namespace ${OCP_NAMESPACE} \\
-                        --set image.repository=${IMAGE_REPO} \\
+                    ./helm upgrade --install ${APP_NAME} ${HELM_CHART_PATH} \
+                        --namespace ${OCP_NAMESPACE} \
+                        --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG}
                     """
                 }
