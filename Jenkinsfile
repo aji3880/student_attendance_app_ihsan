@@ -79,5 +79,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to OpenShift') {
+            steps {
+                script {
+                    sh """
+                    oc rollout restart deployment ${APP_NAME} -n ${OCP_NAMESPACE}
+                    """
+                }
+            }
+        }
     }
 }
