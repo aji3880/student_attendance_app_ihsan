@@ -17,12 +17,15 @@ spec:
     spec:
   template:
     spec:
+  template:
+    spec:
       {{- $sa := .Values.serviceAccount | default dict }}
       serviceAccountName: {{ default (include "helm-chart.fullname" .) $sa.name }}
+      {{- $sc := .Values.securityContext | default dict }}
       securityContext:
-        runAsUser: {{ if .Values.securityContext.runAsUser }}{{ .Values.securityContext.runAsUser }}{{ else }}null{{ end }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-        fsGroup: {{ if .Values.securityContext.fsGroup }}{{ .Values.securityContext.fsGroup }}{{ else }}null{{ end }}
+        runAsUser: {{ default 1000 $sc.runAsUser }}
+        runAsNonRoot: {{ default true $sc.runAsNonRoot }}
+        fsGroup: {{ default 1000 $sc.fsGroup }}
       containers:
         - name: {{ include "helm-chart.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -30,20 +33,3 @@ spec:
           ports:
             - containerPort: {{ .Values.service.targetPort }}
               name: http
-          livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.livenessProbe.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.readinessProbe.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          resources: {{ toYaml .Values.resources | nindent 12 }}
