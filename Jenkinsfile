@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    environment {
+        OCP_NAMESPACE = "test-attendance"
+        APP_NAME      = "frontend-app"
+        IMAGE_TAG     = "latest"
+        OCP_NAME      = "https://api.cluster-9wl8l.dynamic.redhatworkshops.io:6443"
+        HELM_CHART_PATH = "helm/attendance-frontend"
+        IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Login to OpenShift') {
+            steps {
+                sh """
+                oc login --token=\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token) --server=${OCP_NAME} --insecure-skip-tls-verify=true
+                if ! oc get project ${OCP_NAMESPACE} >/dev/null 2>&1; then
+                    oc new-project ${OCP_NAMESPACE} --description="Project for ${APP_NAME}"
+                fi
+                oc project ${OCP_NAMESPACE}
+                """
+            }
+        }
+
+        stage('Start OpenShift Build') {
+            steps {
+                script {
+                    sh """
+                    echo "Triggering OpenShift build..."
+                    if oc get bc ${APP_NAME} >/dev/null 2>&1; then
+                        oc start-build ${APP_NAME} --from-dir=. --wait --follow
+                    else
+                        oc new-build --name=${APP_NAME} --binary --strategy=docker
+                        oc start-build ${APP_NAME} --from-dir=. --wait --follow
+                    fi
+                    """
+                }
+            }
+        }
+
+        stage('install Helm if needed') {
+            steps {
+                script {
+                    sh """
+                    if ! command -v helm &> /dev/null; then
+                        echo "Helm not found, installing..."
+                        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+                    else
+                        echo "Helm is already installed"
+                    fi
+                    helm version
+                    """
+                }
+            }
+        }
+
+        stage('Deploy with Helm') {
+            steps {
+                script {
+                    sh """
+                    echo "Deploying ${APP_NAME} with Helm..."
+                    helm upgrade --install ${APP_NAME} ${HELM_CHART_PATH} \\
+                        --namespace ${OCP_NAMESPACE} \\
+                        --set image.repository=${IMAGE_REPO} \\
+                        --set image.tag=${IMAGE_TAG}
+                    """
+                }
+            }
+        }
+    }
+}
