@@ -34,7 +34,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo "Triggering OpenShift build..."
                     if oc get bc ${APP_NAME} >/dev/null 2>&1; then
                         oc start-build ${APP_NAME} --from-dir=. --wait --follow
                     else
