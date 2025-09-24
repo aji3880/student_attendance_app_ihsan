@@ -1,13 +1,13 @@
 replicaCount: 2
 
 image:
-  repository: "IMAGE_REGISTRY/attendance-frontend"
+  repository: ""
   tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 resources: {}
 
