@@ -1,3 +1,3 @@
-{{- define "attendance-frontend.fullname" -}}
+{{- define "helm-chart.fullname" -}}
 {{- printf "%s" .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
