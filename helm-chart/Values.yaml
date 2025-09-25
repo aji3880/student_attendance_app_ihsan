@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ""
+  repository: "image-registry.openshift-image-registry.svc:5000/test-attendace/frontend-app"
   tag: "latest"
   pullPolicy: IfNotPresent
 
