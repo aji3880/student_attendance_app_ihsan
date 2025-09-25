@@ -42,5 +42,6 @@ securityContext:
 podAnnotations: {}
 
 serviceAccount:
-  create: false
-  name: null
+  create: true
+  name: frontend-app
+

@@ -69,9 +69,8 @@ pipeline {
                 script {
                     sh """
                     ./helm lint ./helm-chart
-                    ./helm upgrade --install ${APP_NAME} ./helm-chart \
-                        --namespace ${OCP_NAMESPACE} \
-                        --create-namespace \
+                    ./helm upgrade --install ${APP_NAME} ./helm-chart --namespace ${OCP_NAMESPACE} \
+                        --set serviceAccount.create=true \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG}
                     ./helm template ${APP_NAME} ./helm-chart --namespace ${OCP_NAMESPACE} \
