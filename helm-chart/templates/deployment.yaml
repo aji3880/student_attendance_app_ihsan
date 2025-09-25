@@ -36,20 +36,24 @@ spec:
           ports:
             - containerPort: {{ default 8080 $svc.targetPort }}
               name: http
+          {{- $lprobe := .Values.livenessProbe | default dict }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.livenessProbe.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+              path: {{ default "/" $lprobe.path }}
+              port: {{ default 8080 $lprobe.port }}
+            initialDelaySeconds: {{ default 10 $lprobe.initialDelaySeconds }}
+            periodSeconds: {{ default 10 $lprobe.periodSeconds }}
+            timeoutSeconds: {{ default 2 $lprobe.timeoutSeconds }}
+            failureThreshold: {{ default 3 $lprobe.failureThreshold }}
+
+          {{- $rprobe := .Values.readinessProbe | default dict }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.readinessProbe.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+              path: {{ default "/" $rprobe.path }}
+              port: {{ default 8080 $rprobe.port }}
+            initialDelaySeconds: {{ default 5 $rprobe.initialDelaySeconds }}
+            periodSeconds: {{ default 5 $rprobe.periodSeconds }}
+            timeoutSeconds: {{ default 2 $rprobe.timeoutSeconds }}
+            failureThreshold: {{ default 3 $rprobe.failureThreshold }}
+
           resources: {{ toYaml .Values.resources | nindent 12 }}
