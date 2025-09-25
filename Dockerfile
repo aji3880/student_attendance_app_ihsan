@@ -11,6 +11,7 @@ FROM nginxinc/nginx-unprivileged:stable-alpine
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/build .
 COPY entrypoint.sh /entrypoint.sh
-# Jangan chmod karena unprivileged
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
