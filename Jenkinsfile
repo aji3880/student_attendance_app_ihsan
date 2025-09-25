@@ -74,6 +74,11 @@ pipeline {
                         --create-namespace \
                         --set image.repository=${IMAGE_REPO} \
                         --set image.tag=${IMAGE_TAG}
+                    helm template frontend-app ./helm-chart --namespace test-attendance \
+                        --set image.repository=image-registry.openshift-image-registry.svc:5000/test-attendance/frontend-app \
+                        --set image.tag=latest > rendered.yaml
+                    cat rendered.yaml
+                    oc apply -f rendered.yaml -n ${OCP_NAMESPACE}
                     """
                 }
             }
