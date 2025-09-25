@@ -1,16 +1,15 @@
-{{- $service := .Values.service | default dict }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "frontend-app.fullname" . }}
   labels:
-    app: {{ .Release.Name }}
+    {{- include "frontend-app.labels" . | nindent 4 }}
 spec:
-  type: {{ $service.type | default "ClusterIP" }}
-  selector:
-    app: {{ .Release.Name }}
+  type: {{ .Values.service.type }}
   ports:
-    - name: http
+    - port: {{ .Values.service.port }}
+      targetPort: http
       protocol: TCP
-      port: {{ $service.port | default 80 }}
-      targetPort: {{ $service.targetPort | default 8080 }}
+      name: http
+  selector:
+    app: {{ include "frontend-app.fullname" . }}

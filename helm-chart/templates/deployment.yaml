@@ -1,56 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ include "frontend-app.fullname" . }}
   labels:
-    app: {{ include "helm-chart.fullname" . }}
+    {{- include "frontend-app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "helm-chart.fullname" . }}
+      app: {{ include "frontend-app.fullname" . }}
   template:
     metadata:
       labels:
-        app: {{ include "helm-chart.fullname" . }}
-{{- with .Values.podAnnotations }}
-      annotations:
-{{ toYaml . | nindent 8 }}
-{{- end }}
+        app: {{ include "frontend-app.fullname" . }}
     spec:
-      serviceAccountName: {{- if and .Values.serviceAccount .Values.serviceAccount.name }}
-        {{ .Values.serviceAccount.name }}
-      {{- else }}
-        {{ include "helm-chart.fullname" . }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ default (include "frontend-app.fullname" .) .Values.serviceAccount.name }}
       {{- end }}
-
       containers:
-        - name: {{ include "helm-chart.fullname" . }}
+        - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            {{- $service := .Values.service | default dict }}
-            - containerPort: {{ $service.targetPort | default 8080 }}
+            - containerPort: 80
               name: http
-
-          {{- $lprobe := .Values.livenessProbe | default dict }}
-          livenessProbe:
-            httpGet:
-              path: {{ default "/" $lprobe.path }}
-              port: {{ default 8080 $lprobe.port }}
-            initialDelaySeconds: {{ default 10 $lprobe.initialDelaySeconds }}
-            periodSeconds: {{ default 10 $lprobe.periodSeconds }}
-            timeoutSeconds: {{ default 2 $lprobe.timeoutSeconds }}
-            failureThreshold: {{ default 3 $lprobe.failureThreshold }}
-
-          {{- $rprobe := .Values.readinessProbe | default dict }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ default "/" $rprobe.path }}
-              port: {{ default 8080 $rprobe.port }}
-            initialDelaySeconds: {{ default 5 $rprobe.initialDelaySeconds }}
-            periodSeconds: {{ default 5 $rprobe.periodSeconds }}
-            timeoutSeconds: {{ default 2 $rprobe.timeoutSeconds }}
-            failureThreshold: {{ default 3 $rprobe.failureThreshold }}
-
-          resources: {{ toYaml .Values.resources | nindent 12 }}
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          {{- end }}

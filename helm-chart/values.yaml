@@ -1,4 +1,4 @@
-replicaCount: 1
+replicaCount: 2
 
 image:
   repository: "image-registry.openshift-image-registry.svc:5000/test-attendance/frontend-app"
@@ -8,39 +8,27 @@ image:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8080
 
-livenessProbe:
-  path: /
-  port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 2
-  failureThreshold: 3
+resources: {}
 
-readinessProbe:
-  path: /
-  port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 5
-  timeoutSeconds: 2
-  failureThreshold: 3
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
 
 route:
-  enabled: true
+  create: true
   host: ""
   tls: false
 
-ingress:
-  enabled: false
-
-securityContext:
-  runAsUser: null    # if null OpenShift will assign random UID
-  runAsNonRoot: true
-  fsGroup: null
-
-podAnnotations: {}
-
 serviceAccount:
   create: false
-  name: null
+  name: ""
+
+# readiness/liveness probes (optional for static site)
+readinessProbe:
+  enabled: false
+
+livenessProbe:
+  enabled: false

@@ -1,16 +1,21 @@
-{{- $route := .Values.route | default dict }}
+{{- if .Values.route.create }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ include "frontend-app.fullname" . }}
+  labels:
+    {{- include "frontend-app.labels" . | nindent 4 }}
 spec:
   to:
     kind: Service
-    name: {{ include "helm-chart.fullname" . }}
+    name: {{ include "frontend-app.fullname" . }}
   port:
     targetPort: http
-{{- if $route.host }}
-  host: {{ $route.host }}
-{{- end }}
+  {{- if .Values.route.tls }}
   tls:
-    termination: {{ if $route.tls }}edge{{ else }}""{{ end }}
+    termination: edge
+  {{- end }}
+  {{- if .Values.route.host }}
+  host: {{ .Values.route.host }}
+  {{- end }}
+{{- end }}
