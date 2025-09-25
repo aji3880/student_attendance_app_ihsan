@@ -1,8 +1,9 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --silent
+RUN apk add --no-cache python3 make g++ \
+    && npm install --legacy-peer-deps --silent
 
 COPY . .
 RUN npm run build
