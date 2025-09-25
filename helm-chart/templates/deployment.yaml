@@ -29,8 +29,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.targetPort | default 8080 }}
+            - containerPort: {{ $service.targetPort | default 8080 }}
+              name: http
 
           {{- $lprobe := .Values.livenessProbe | default dict }}
           livenessProbe:
