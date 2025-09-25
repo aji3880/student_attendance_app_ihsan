@@ -26,7 +26,7 @@ spec:
 
       containers:
         - name: {{ include "helm-chart.fullname" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "image-registry.openshift-image-registry.svc:5000/test-attendace/frontend-app:latest"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             {{- $service := .Values.service | default dict }}
