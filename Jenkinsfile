@@ -68,6 +68,7 @@ pipeline {
             steps {
                 script {
                     sh """
+                    ./helm lint ./helm-chart
                     ./helm upgrade --install ${APP_NAME} ./helm-chart \
                         --namespace ${OCP_NAMESPACE} \
                         --create-namespace \
