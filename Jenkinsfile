@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Start images build') {
+        stage('build images') {
             steps {
                 script {
                     sh """
@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('install Helm') {
+        stage('install helm') {
             steps {
                 script {
                     sh """
@@ -64,7 +64,7 @@ pipeline {
             }
         }
 
-        stage('Deploy Helm') {
+        stage('deploy helm') {
             steps {
                 script {
                     sh """
@@ -83,7 +83,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to OpenShift') {
+        stage('rollout deployment') {
             steps {
                 script {
                     sh """
