@@ -7,13 +7,13 @@ COPY . .
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:stable-alpine
+
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/build .
 
-# Copy entrypoint
+# entrypoint sudah executable dari host
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
-
 ENTRYPOINT ["/entrypoint.sh"]
+
