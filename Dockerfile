@@ -6,14 +6,10 @@ COPY . .
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:stable-alpine
-
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/build .
 
-# copy entrypoint dan pastikan executable
-COPY entrypoint.sh /entrypoint.sh
-USER root
-RUN chmod a+x /entrypoint.sh
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
