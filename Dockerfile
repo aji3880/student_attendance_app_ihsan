@@ -13,8 +13,9 @@ COPY --from=builder /app/build .
 # copy entrypoint dan pastikan executable
 COPY entrypoint.sh /entrypoint.sh
 USER root
+RUN chown user:user /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-USER 101
+USER user
 
 EXPOSE 8080
 ENTRYPOINT ["/entrypoint.sh"]
