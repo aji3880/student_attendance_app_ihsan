@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Start OpenShift Build') {
+        stage('Start images build') {
             steps {
                 script {
                     sh """
