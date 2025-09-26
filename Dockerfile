@@ -13,14 +13,12 @@ FROM nginx:stable-alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# Copy custom nginx config if present (optional)
-USER root
+# Copy nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx \
-    && chmod -R 777 /var/cache/nginx /var/run /var/log/nginx
-
-USER user
+RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx /tmp/nginx \
+    && chmod -R 777 /var/cache/nginx /var/run /var/log/nginx /tmp/nginx
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
