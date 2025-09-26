@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: "image-registry.openshift-image-registry.svc:5000/test-attendance/frontend-app"
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP
