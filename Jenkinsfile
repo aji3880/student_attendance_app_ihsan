@@ -6,7 +6,7 @@ pipeline {
         APP_NAME      = "frontend-app"
         IMAGE_TAG     = "latest"
         OCP_NAME      = "https://api.cluster-9wl8l.dynamic.redhatworkshops.io:6443"
-        OCP_TOKEN    = "sha256~9r6JsDXJQxL8ZoVUTXcRIXYbkjyH1xfHA7ZR7FfLhg8"
+        OCP_TOKEN    = "sha256~D2TZvePMEOOQh3HpWy6xepNC-qAXomeK00r_hRJuNJc"
         HELM_CHART_PATH = "helm-chart/"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
     }
