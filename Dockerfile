@@ -14,9 +14,13 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy custom nginx config if present (optional)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 USER root
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx \
+    && chmod -R 777 /var/cache/nginx /var/run /var/log/nginx
+
+USER user
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
