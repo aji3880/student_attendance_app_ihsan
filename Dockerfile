@@ -17,10 +17,6 @@ COPY --from=builder /app/build /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 USER root
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-RUN chown nobody.nogroup /entrypoint.sh
 
-USER user
 EXPOSE 80
-CMD ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
