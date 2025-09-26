@@ -12,13 +12,13 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Login to OpenShift') {
+        stage('openshift login') {
             steps {
                 sh """
                 oc login --token=${OCP_TOKEN} --server=${OCP_NAME} --insecure-skip-tls-verify=true
