@@ -5,8 +5,8 @@ pipeline {
         OCP_NAMESPACE = "test-attendance"
         APP_NAME      = "frontend-app"
         IMAGE_TAG     = "latest"
-        OCP_NAME      = "https://api.cluster-9wl8l.dynamic.redhatworkshops.io:6443"
-        OCP_TOKEN    = "sha256~D2TZvePMEOOQh3HpWy6xepNC-qAXomeK00r_hRJuNJc"
+        OCP_NAME      = "https://api.cluster-lqscz.dynamic.redhatworkshops.io:6443"
+        OCP_TOKEN    = "sha256~VT69KSY0TZCaul1EsomGp1WsYpDZn4USzDNuqUHIDDY"
         HELM_CHART_PATH = "helm-chart/"
         IMAGE_REPO = "image-registry.openshift-image-registry.svc:5000/${OCP_NAMESPACE}/${APP_NAME}"
     }
