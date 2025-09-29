@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('openshift login') {
+        stage('login ka ocp') {
             steps {
                 sh """
                 oc login --token=${OCP_TOKEN} --server=${OCP_NAME} --insecure-skip-tls-verify=true
