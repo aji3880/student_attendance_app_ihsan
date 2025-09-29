@@ -20,5 +20,6 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx /tmp/nginx \
     && chmod -R 777 /var/cache/nginx /var/run /var/log/nginx /tmp/nginx
 
+USER user
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
