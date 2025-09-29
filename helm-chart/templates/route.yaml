@@ -13,6 +13,7 @@ spec:
     targetPort: 8080
   {{- if .Values.route.tls }}
   tls:
+    insecureEdgeTermininationPolicy: None
     termination: edge
   {{- end }}
   {{- if .Values.route.host }}
