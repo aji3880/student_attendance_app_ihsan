@@ -18,9 +18,12 @@ tolerations: []
 affinity: {}
 
 route:
-  create: true
+  port: 80
+  targetPort: 8080
+  enabled: true
   host: ""
   tls: false
+
 
 serviceAccount:
   create: false
