@@ -15,7 +15,6 @@ spec:
   tls:
     insecureEdgeTermininationPolicy: None
     termination: edge
-  {{- end }}
   {{- if .Values.route.host }}
   host: {{ .Values.route.host }}
   {{- end }}
