@@ -10,8 +10,8 @@ spec:
     kind: Service
     name: {{ include "frontend-app.fullname" . }}
   port:
-    targetPort: 8080
-  {{- if .Values.route.tls }}
+    port: {{  .Values.route.port }}
+    targetPort: {{ .Values.route.targetPort }}
   tls:
     insecureEdgeTermininationPolicy: None
     termination: edge

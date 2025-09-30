@@ -27,6 +27,8 @@ readinessProbe:
   failureThreshold: 3
 
 route:
+  port: 80
+  targetPort: 8080
   enabled: true
   host: ""
   tls: false
